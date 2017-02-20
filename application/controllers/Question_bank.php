@@ -8,13 +8,6 @@ class Question_bank extends CI_Controller{
 	{
 		parent::__construct();
 		$this->load->model('Question_bank_model');
-/*
-		$this->data['dealed'] = 'dealde';
-				$this->data['rank'] = $this->Question_bank_model->rank();
-				$this->load->view('question_bank/rank',$this->data);
-				$this->data['dealed'] = 'dealde';
-				return;
-*/
 		
 		require_once APPPATH . 'third_party/PHPExcel/Classes/PHPExcel.php';
 		require_once APPPATH . 'third_party/PHPExcel/Classes/PHPExcel/IOFactory.php';
@@ -248,15 +241,15 @@ class Question_bank extends CI_Controller{
 	{
 		// var_dump($this->session->user_info);
 		// var_dump($this->data);
-		
+		/*turn off
 		$this->data['dealed'] = 'dealde';
 				$this->data['rank'] = $this->Question_bank_model->rank();
 				$this->load->view('question_bank/rank',$this->data);
 				$this->data['dealed'] = 'dealde';
 				return;
+		*/
 
-
-		if($this->data['dealed'] != 'dealde')
+		//if($this->data['dealed'] != 'dealde')
 		{
 			$this->session->submit = 'submit';
 			$this->session->time = date('Y-m-d h:i:s');
