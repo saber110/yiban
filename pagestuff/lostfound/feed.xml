@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>
+<title>中南大学易招领</title>
+<link>http://localhost/yiban/LostFound</link>
+<description>中南大学易招领订阅</description>
+<language>en-us</language>
+<pubDate>Fri, 22 Jul 2016 11:44:07 GMT</pubDate>
+<item>
+<title>见到一双袜子</title>
+<link>http://localhost/yiban/LostFound/detail/8</link>
+<description><![CDATA[ 在二食堂捡到一双袜子 ]]></description>
+<pubDate>Fri, 22 Jul 2016 06:41:22 GMT</pubDate>
+<guid>http://localhost/yiban/LostFound/detail/8</guid>
+</item>
+<item>
+<title>捡到易班熊一只</title>
+<link>http://localhost/yiban/LostFound/detail/7</link>
+<description><![CDATA[ 本人在二食堂广场捡到了易班熊一只 ]]></description>
+<pubDate>Sat, 09 Jul 2016 15:32:30 GMT</pubDate>
+<guid>http://localhost/yiban/LostFound/detail/7</guid>
+</item>
+<item>
+<title>捡到课本一坨</title>
+<link>http://localhost/yiban/LostFound/detail/3</link>
+<description><![CDATA[ 如题 ]]></description>
+<pubDate>Fri, 05 May 1905 18:35:44 GMT</pubDate>
+<guid>http://localhost/yiban/LostFound/detail/3</guid>
+</item>
+<item>
+<title>捡到杯子一只</title>
+<link>http://localhost/yiban/LostFound/detail/4</link>
+<description><![CDATA[ 捡到飞机一只，破损严重。绝对不是我弄坏的，我捡到时候就这样了··· ···... ]]></description>
+<pubDate>Fri, 05 May 1905 18:35:44 GMT</pubDate>
+<guid>http://localhost/yiban/LostFound/detail/4</guid>
+</item>
+</channel>
+</rss>

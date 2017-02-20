@@ -1,0 +1,173 @@
+@media only screen and (max-width: 330px) {
+
+h1 {
+	font-size: 2.5em
+}
+
+}
+@media only screen and (min-width: 331px) {
+
+h1 {
+	font-size: 3em
+}
+
+}
+
+@font-face {
+	font-family:hycgj;
+	src:url("../../fonts/hycgj.TTF")
+}
+@font-face {
+	font-family: hyngj;
+	src:url("../../fonts/hyngj.TTF")
+}
+@font-face {
+	font-family: xixinkaijian;
+	src:url("../../fonts/xixinkaijian.ttf");
+}
+* {
+	border:none;
+	margin: 0;
+ 	padding: 0;
+  	border: 0;
+  	text-decoration: none;
+  	list-style-type: none
+}
+body {
+	font-family: hycgj;
+	width:100%;
+	height: 100%
+}
+.body {
+	width: 100%;
+	height: 100%;
+}
+.header {
+	height:27%;
+	width: 100%
+}
+.content {
+	padding-top: 5%;
+	-webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+	height: 36%;
+	width: 100%
+}
+.button {
+	height: 37%;
+	width: 100%
+}
+h2 {
+	margin: 0.8em 0 0 0.3em;
+	font-family:xixinkaijian;
+	color:#ff0000;
+	letter-spacing: 0.55em;
+	font-size: 2.4em
+}
+h1 {
+	margin: 0.5em 0.2em 0 0;
+	font-family: hyngj;
+	color: #e23600;
+	text-align: right
+}
+h4 {
+	text-align: center;
+	margin: 1.4em 0 0 0;
+	font-family: hycgj;
+	font-size: 1.45em;
+	color: #a17d17
+}
+img {
+	margin-left: 4%;
+	width: 98%
+}
+#content_in {
+	font-size: 1.5em;
+	margin-top: 0.3em;
+	width: 90%;
+	height: 2em;
+	border: solid 1px #e23600
+}
+input {
+  color:inherit;
+  font:inherit;
+  margin:0;
+  line-height:normal;
+}
+input[type="radio"] {
+  -moz-box-sizing:border-box;
+  box-sizing:border-box;
+  padding:0;
+}
+label.radio {
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+  position: relative;
+  margin: 0 5px 5px 0;
+  padding: 0;
+  background-color: #cfcfcf;
+  border-radius: 100%;
+  vertical-align: top;
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.1) inset, 0 1px 4px rgba(0, 0, 0, 0.1) inset, 1px -1px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+label.radio > span.pip {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  border-radius: 100%;
+  background: blue;
+  top: 4px;
+  left: 4px;
+  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  background-image: linear-gradient(#ffffff 0, #e7e7e7 100%);
+  transform: scale(0, 0);
+  transition: all 0.2s ease;
+}
+label.radio.on {
+  background-color: #05abe0;
+}
+label.radio.on > span.pip {
+  transform: scale(1, 1);
+}
+input[type=radio].replaced {
+  position: absolute;
+  left: -9999em;
+}
+.label_span{
+	padding: 2px 2px 2px 8px;
+	font-family: hycgj;
+	color: #a17d17;
+	font-size: 1.25em;
+	border-radius: 5px;
+	font-weight: 600;
+	border: solid 1px #e23600;
+	margin: 1em 0 0 0
+}
+.btn div {
+	width: 100%;
+	padding:10% 0 10% 0;
+	margin: 0 auto;
+}
+.btn_sc {
+	margin-left:15%;
+	background-color: #ffe555;
+	color:#e23600;
+	width: 70%;
+	height: 30%;
+	border-radius: 46px;
+	font-size: 2.4em;
+	text-align: center;
+	padding:0.3em
+}
+.btn_cy {
+	margin-left:35%;
+	background-color: #ffcccc;
+	color: #e23600;
+	border-radius: 5px;
+	padding: 0.3em;
+	font-size: 1.8em
+}

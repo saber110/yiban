@@ -1,0 +1,34 @@
+
+
+  <div class="footer">
+    <p><span class="glyphicon glyphicon-heart"></span> 中南易班 <!-- | theme by <a href="https://github.com/upcyiban/SignName">upcyiban</a> --></p>
+  </div>
+</div>
+</body>
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="<?php echo base_url();?>/bower_components/jquery/dist/jquery.js"></script>
+<script src="<?php echo base_url();?>/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script type="text/javascript">
+function submitLocation()
+{
+	//alert(JSON.stringify(document.getElementById("yibanhtml5").innerHTML, null, 4).match("address.*"));
+		$.get("./insertLocation?addr=" +(JSON.stringify(document.getElementById("yibanhtml5").innerHTML, null, 4)).match("address.*") )
+	
+}
+
+</script>
+<script src = "<?php echo base_url();?>/js/qiandao/location.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js(.tmp) scripts/main.js -->
+<script src="<?php echo base_url();?>/js/qiandao/main.js"></script>
+<!-- endbuild -->
+
+<!-- Baidu Analytics-->
+<script>
+
+</script>
+
+</html>

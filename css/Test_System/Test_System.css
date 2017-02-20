@@ -1,0 +1,322 @@
+@font-face {
+  font-family: HYXLSJ;
+  src:url("../../fonts/HYXLSJ.ttf");
+}
+@font-face {
+  font-family: HYJSJ;
+  src:url("../../fonts/HYJSJ.ttf");
+}
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  text-decoration: none;
+  list-style-type: none;
+}
+body {
+  font-family: arial; 
+  font-size: 30px;
+  -webkit-text-size-adjust:none;
+}
+.d_select , .f_select {
+  margin: 60px 5% 0 2%;
+}
+input {
+  color:inherit;
+  font:inherit;
+  margin:0;
+  line-height:normal;
+}
+input[type="radio"] {
+  -moz-box-sizing:border-box;
+  box-sizing:border-box;
+  padding:0;
+}
+label.radio {
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+  position: relative;
+  margin: 0 5px 5px 0;
+  padding: 0;
+  background-color: #cfcfcf;
+  border-radius: 100%;
+  vertical-align: top;
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.1) inset, 0 1px 4px rgba(0, 0, 0, 0.1) inset, 1px -1px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+label.radio > span.pip {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  border-radius: 100%;
+  background: blue;
+  top: 4px;
+  left: 4px;
+  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  background-image: linear-gradient(#ffffff 0, #e7e7e7 100%);
+  transform: scale(0, 0);
+  transition: all 0.2s ease;
+}
+label.radio.on {
+  background-color: #05abe0;
+}
+label.radio.on > span.pip {
+  transform: scale(1, 1);
+}
+input[type=radio].replaced {
+  position: absolute;
+  left: -9999em;
+}
+.check-box input[type="checkbox"] {
+  visibility: hidden;
+}
+.check-box {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    display: inline-block;
+    margin: 2px 7px 0 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 1px #ccc;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background: rgb(255, 255, 255);
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(237, 237, 237, 1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 1)), color-stop(47%, rgba(246, 246, 246, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(237, 237, 237, 1) 100%);
+    background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(237, 237, 237, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(237, 237, 237, 1) 100%);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(237, 237, 237, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed', GradientType=0);
+    border: 1px solid #ccc;
+}
+.checkedBox
+{
+    -moz-box-shadow: inset 0 0 5px 1px #ccc;
+    -webkit-box-shadow: inset 0 0 5px 1px #ccc;
+    box-shadow: inset 0 0 5px 1px #ccc;
+    border-bottom-color: #fff;
+}
+.check-box i 
+{
+    background: url("check_mark.png") no-repeat center center;
+    position: absolute;
+    left: 3px;
+    bottom: -15px;
+    width: 16px;
+    height: 16px;
+    opacity: .5;
+    -webkit-transition: all 400ms ease-in-out;
+    -moz-transition: all 400ms ease-in-out;
+    -o-transition: all 400ms ease-in-out;
+    transition: all 400ms ease-in-out;
+    -webkit-transform:rotateZ(-180deg);
+    -moz-transform:rotateZ(-180deg);
+    -o-transform:rotateZ(-180deg);
+    transform:rotateZ(-180deg);
+}
+.checkedBox i 
+{
+    bottom: 2px;
+    -webkit-transform:rotateZ(0deg);
+    -moz-transform:rotateZ(0deg);
+    -o-transform:rotateZ(0deg);
+    transform:rotateZ(0deg);
+}
+.b_score
+{
+  padding-top: 100px;
+  width: 100px;
+  margin:auto;
+}
+.b_score button
+{
+  background-color: #aedef4;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 28px;
+  width: 80px;
+  height: 40px;
+}
+button:hover
+{
+  background-color: #a1d9f2;
+}
+@media only screen and (min-width: 1201px) {
+
+.body {
+  padding-top: 30px;
+  margin: 0 auto;
+  width: 1200px;
+  background-color: #f5ffff;
+  margin-bottom: 100px;
+}
+h1 {
+  font-size: 80px;
+  font-family: HYXLSJ;
+  text-align: center;
+}
+.test {
+  background-image: url("../../svg/Test_System/radio-unchecked.svg");
+  background-repeat: no-repeat;
+  background-position: 20px 20px;
+  padding: 20px 0 0 100px;
+}
+.test p {
+  font-size: 28px;
+}
+.test label {
+  font-size: 24px;
+}
+.test div input {
+  width: 400px;
+}
+h3 {
+  font-family: HYJSJ;
+  color: #ad72ff;
+  padding-bottom: 30px;
+}
+span {
+  color: #ad72ff;
+  float: right;
+  font-family: HYXLSJ;
+  font-weight: 900;
+}
+
+}
+@media only screen and (min-width: 769px) and (max-width: 991px) {
+
+.body {
+  padding-top: 30px;
+  margin: 0 auto;
+  width: 100%;
+  background-color: #f5ffff;
+  margin-bottom: 100px;
+}
+h1 {
+  font-size: 80px;
+  font-family: HYXLSJ;
+  text-align: center;
+}
+.test {
+  background-image: url("../../svg/Test_System/radio-unchecked.svg");
+  background-repeat: no-repeat;
+  background-position: 20px 20px;
+  padding: 20px 0 0 100px;
+}
+.test p {
+  font-size: 28px;
+}
+.test label {
+  font-size: 24px;
+}
+.test div input {
+  width: 400px;
+}
+h3 {
+  font-family: HYJSJ;
+  color: #ad72ff;
+  padding-bottom: 30px;
+}
+span {
+  color: #ad72ff;
+  float: right;
+  font-family: HYXLSJ;
+  font-weight: 900;
+}
+
+}
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+
+.body {
+  padding-top: 30px;
+  margin: 0 auto;
+  width: 990px;
+  background-color: #f5ffff;
+  margin-bottom: 100px;
+}
+h1 {
+  font-size: 80px;
+  font-family: HYXLSJ;
+  text-align: center;
+}
+.test {
+  background-image: url("../../svg/Test_System/radio-unchecked.svg");
+  background-repeat: no-repeat;
+  background-position: 20px 20px;
+  padding: 20px 0 0 100px;
+}
+.test p {
+  font-size: 28px;
+}
+.test label {
+  font-size: 24px;
+}
+.test div input {
+  width: 400px;
+}
+h3 {
+  font-family: HYJSJ;
+  color: #ad72ff;
+  padding-bottom: 30px;
+}
+span {
+  color: #ad72ff;
+  float: right;
+  font-family: HYXLSJ;
+  font-weight: 900;
+}
+
+}
+
+@media only screen and (max-width: 768px) {
+
+.body {
+  padding-top: 30px;
+  margin: 0 auto;
+  width: 100%;
+  background-color: #f5ffff;
+  margin-bottom: 60px;
+  font-size: 22px;
+}
+h1 {
+  font-size: 50px;
+  font-family: HYXLSJ;
+  text-align: center;
+}
+.test
+{
+  background-image: url("../../svg/Test_System/radio-unchecked.svg");
+  background-repeat: no-repeat;
+  background-position: 10px 20px;
+  padding: 20px 0 0 60px;
+}
+.test p
+{
+  font-size: 22px;
+}
+.test label
+{
+  font-size: 20px;
+}
+h3
+{
+  font-family: HYJSJ;
+  color: #ad72ff;
+  padding-bottom: 30px;
+  font-size: 28px;
+}
+span
+{
+  color: #ad72ff;
+  float: right;
+  font-family: HYXLSJ;
+  font-weight: 900;
+  font-size: 26px;
+}
+
+}

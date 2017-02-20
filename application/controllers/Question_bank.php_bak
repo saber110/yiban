@@ -1,0 +1,193 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Question_bank extends CI_Controller{
+	public $ScoreData;
+
+	public function __construct()
+	{
+		parent::__construct();
+		require_once APPPATH . 'third_party/PHPExcel/Classes/PHPExcel.php';
+		require_once APPPATH . 'third_party/PHPExcel/Classes/PHPExcel/IOFactory.php';
+		require_once APPPATH . 'third_party/PHPExcel/Classes/PHPExcel/Reader/Excel5.php';
+		$this->load->model('Question_bank_model');
+ 		//site服务器配置
+		$config = array('appID' => '3d8157e7e4d7e123',
+                        'appSecret' => '31c12fd4d8a19da28113b5e89c34081e',
+                        'callback' => "http://f.yiban.cn/iapp62793");
+        	$this->load->library('YibanSDK', $config, 'yiban');
+
+        	$this->yiban->getAuth();
+        	$this->data['user_info'] = $this->session->user_info;
+		//var_dump($this->data['user_info']['yb_userid']);
+        	//var_dump($this->Question_bank_model->getdata($this->data['user_info']['yb_userid']));
+        	//exit;
+        	if($this->Question_bank_model->getdata($this->data['user_info']['yb_userid']) >= 1)
+        	{
+        		var_dump("您只能考一次");
+        		exit;
+        	}
+	}
+
+	public function update_db()
+	{
+		$objReader = PHPExcel_IOFactory::createReader('Excel2007'); //use Excel5 for 2003 format 
+		$excelpath= './././uploads/question_bank/test.xlsx';
+		$objPHPExcel = $objReader->load($excelpath); 	
+	    $sheet = $objPHPExcel->getSheet(0); 
+	    $highestRow = $sheet->getHighestRow();           //取得总行数 
+	    // var_dump('ROW');
+	    // var_dump($highestRow);
+	    $highestColumn = $sheet->getHighestColumn();     //取得总列数
+	    // var_dump('columu');
+	    // var_dump($highestColumn);
+
+
+		for($j=3;$j<=$highestRow;$j++)                       //从第三行开始读取数据
+	    { 
+
+	        $str="";
+
+	        for($k='A';$k<=$highestColumn;$k++)            //从A列读取数据
+
+	         { 
+	             $str .=$objPHPExcel->getActiveSheet()->getCell("$k$j")->getValue().'|*|';//读取单元格
+	         } 
+	        $strs = explode("|*|",$str);
+	        // var_dump($strs);
+	        $sql = array(
+	        	'department' => $strs[0],
+	        	'stdgroup'   => $strs[1],
+	        	'stdposition'=> $strs[2],
+	        	'name'       => $strs[3],
+	        	'sex'        => $strs[4],
+	        	'college'    => $strs[5],
+	        	'class'      => $strs[6],
+	        	'dormnumber' => $strs[7],
+	        	'Tel'        => $strs[8],
+	        	'QQ'         => $strs[9],
+	        	'email'      => $strs[10],
+	        	'cardnumber' => $strs[11],
+	        	'stdnumber'  => $strs[12]
+	        	);
+	        // var_dump($sql);
+			$this->Question_bank_model->setdata($sql);
+
+
+        }
+	}
+
+	public function upload_tiku()
+	{
+		$objReader = PHPExcel_IOFactory::createReader('Excel2007'); //use Excel5 for 2003 format 
+		$excelpath= './././uploads/question_bank/tiku.xlsx';
+		$objPHPExcel = $objReader->load($excelpath); 	
+	    $sheet = $objPHPExcel->getSheet(0); 
+	    $highestRow = $sheet->getHighestRow();           //取得总行数 
+	    // var_dump('ROW');
+	    // var_dump($highestRow);
+	    $highestColumn = $sheet->getHighestColumn();     //取得总列数
+	    // var_dump('columu');
+	    // var_dump($highestColumn);
+
+
+		for($j=2;$j<=$highestRow;$j++)                       //从第二行开始读取数据
+	    { 
+
+	        $str="";
+
+	        for($k='A';$k<=$highestColumn;$k++)            //从A列读取数据
+
+	         { 
+	             $str .=$objPHPExcel->getActiveSheet()->getCell("$k$j")->getValue().'|*|';//读取单元格
+	         } 
+	        $strs = explode("|*|",$str);
+	        // var_dump($strs);
+	        $sql = array(
+	        	'ques_id'     => $strs[0],
+	        	'title'       => $strs[1],
+	        	'Options_A'   => $strs[2],
+	        	'Options_B'   => $strs[3],
+	        	'Options_C'   => $strs[4],
+	        	'Options_D'   => $strs[5],
+	        	'anwser'      => $strs[6]
+	        	);
+	        // var_dump($sql);
+			$this->Question_bank_model->settiku($sql);
+		}
+	}
+
+	public function index()
+	{
+		var_dump($this->session->user_info);
+		var_dump($this->data);
+		//if(isset($this->session->token))
+		{
+			$temp = $this->Question_bank_model->gettiku();
+			
+
+			$this->load->helper('form'); 
+			$this->load->library('form_validation');
+			$this->load->view('question_bank/header');
+
+			if(empty($this->input->post()))
+			{
+				for($number=0;$number<$temp['num'];$number++)
+				{
+					$this->ScoreData['id']        = $temp['result'][$number]['id'];
+					$this->ScoreData['ques_id']   = $temp['result'][$number]['ques_id'];	//用来代表本套试题的全部
+					$this->ScoreData['title']     = $temp['result'][$number]['title'];
+					$this->ScoreData['Options_A'] = $temp['result'][$number]['Options_A'];
+					$this->ScoreData['Options_B'] = $temp['result'][$number]['Options_B'];
+					$this->ScoreData['Options_C'] = $temp['result'][$number]['Options_C'];
+					$this->ScoreData['Options_D'] = $temp['result'][$number]['Options_D'];
+					if(isset($temp['result'][$number]['Options_E']))
+					{
+						$this->ScoreData['Options_E'] = $temp['result'][$number]['Options_E'];
+					}
+					if(isset($temp['result'][$number]['Options_F']))
+					{
+						$this->ScoreData['Options_F'] = $temp['result'][$number]['Options_F'];
+					}
+					// var_dump($data);	
+
+					$this->load->view('question_bank/question',$this->ScoreData);
+				}
+
+				$this->load->view('question_bank/footer');
+
+			}
+		}
+	}
+
+	//整张试卷一起获得得分
+	public function score()
+	{
+		$score = 0;
+		$temp = $this->Question_bank_model->gettiku();
+		// var_dump($this->input->post());
+
+		for($number=1;$number<=$temp['num'];$number++)
+		{
+			if($this->input->post($number) == $temp['result'][$number-1]['anwser'])
+			{
+				$score = $score + $temp['result'][$number-1]['fenzhi'];
+			}
+		}
+		$data['score'] = $score;
+		// var_dump($score);
+		$para = array(
+			'name'    => $this->session->yb_username,
+			'session' => $this->session,
+			'score'   => $score,
+			'detail'  => json_encode($this->input->post())
+			);
+		if($this->Question_bank_model->score($para))
+		{
+			$this->load->library('form_validation');
+			$this->load->view('question_bank/header');
+			$this->load->view('question_bank/score',$data);
+			$this->load->view('question_bank/footer');
+		}
+
+	}
+}

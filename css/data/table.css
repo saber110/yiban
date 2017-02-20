@@ -1,0 +1,43 @@
+table { 
+  color: #333;
+  font-family: Helvetica, Arial, sans-serif;
+  width: 640px;
+  /* Table reset stuff */
+  border-collapse: collapse; border-spacing: 0; 
+}
+		
+td, th {  border: 0 none; height: 30px; }
+			
+th {
+  /* Gradient Background */
+	background: linear-gradient(#00CC33 0%,#33CC99 100%);
+	color: #000000; font-weight: bold;
+	height: 70px;
+}
+		
+td { background: #FAFAFA; text-align: center; }
+
+/* Zebra Stripe Rows */
+		
+tr:nth-child(even) td { background: #EEE; } 
+tr:nth-child(odd) td { background: #FDFDFD; }
+
+/* First-child blank cells! */
+tr td:first-child, tr th:first-child { 
+	background: none; 
+	font-style: italic;
+	font-weight: bold;
+	font-size: 14px;
+	text-align: right;
+	padding-right: 10px;
+	width: 80px; 
+}
+
+/* Add border-radius to specific cells! */
+tr:first-child th:nth-child(2) { 
+  border-radius: 5px 0 0 0; 
+} 
+
+tr:first-child th:last-child { 
+  border-radius: 0 5px 0 0; 
+}
