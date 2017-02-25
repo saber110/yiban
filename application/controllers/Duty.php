@@ -11,6 +11,7 @@ class Duty extends CI_Controller{
 		parent::__construct();
 		$this->load->model('Duty_model');
 		$this->load->model('Email_model');
+		$this->load->library('My_email');
 
 		$this->weekday['today'] = date('w',strtotime(date('Y-m-d')));
 		$this->weekday['days'] = $this->getdays(date('Y-m-d'));
@@ -22,56 +23,56 @@ class Duty extends CI_Controller{
 		$this->weekday['Saturday'] = date('Y-m-d',strtotime('+1 day',strtotime($this->weekday['Friday'])));
 		$this->weekday['Sunday'] = date('Y-m-d',strtotime('+1 day',strtotime($this->weekday['Saturday'])));
 
-		// $this->data['user_info']['yb_username'] = "胡皓斌";
-		// $this->data['user_info']['yb_userid']   = 7041045;
+		$this->data['user_info']['yb_username'] = "胡皓斌";
+		$this->data['user_info']['yb_userid']   = 7041045;
 
-		// 本地服务器配置
-		$config = array(
-						'appID' => 'b3a15ae91bbdb732',
-                        'appSecret' => 'fc253742de277b0ca343794f6997c45c',
-                        'callback' => "http://f.yiban.cn/iapp63235"
-                        );
-
-		$this->load->library('YibanSDK',$config,'yiban');
-
-		if (!$this->input->get('verify_request')) {
-				$this->session->url = $_SERVER['REQUEST_URI'];
-		}
-		//var_dump($this->session);
-		if (!isset($this->session->token)) {     // 未获取授权
-		/**
-		 * 从授权服务器回调返回时，URL中带有code（授权码）参数
-		 *
-		 */
-
-				$au  = $this->yiban->getAuthorize();
-				//var_dump($this->input->post());
-				if ($this->input->get('verify_request')) {
-				/**
-				 * 使用授权码（code）获取访问令牌
-				 * 若获取成功，返回 $info['access_token']
-				 * 否则查看对应的 msgCN 查看错误信息
-				 */
-						$info = $this->yiban->getFrameUtil()->perform();
-						//var_dump($info);
-						if (!isset($info['visit_oauth']['access_token'])) {
-								//echo $info['msgCN'];
-								redirect($au->forwardurl());
-						}
-						$this->session->token = $info['visit_oauth']['access_token'];
-						$this->data['user_info']['yb_userid'] = $info['visit_user']['userid'];
-						$this->data['user_info']['yb_username'] = $info['visit_user']['username'];
-						header("Location: " . $this->session->url);
-				}
-				else {   // 重定向到授权服务器（原sdk使用header()重定向）
-						redirect($au->forwardurl());
-						// header('Location: ' . $au->forwardurl());
-				}
-		}
-		if(!isset($this->data['user_info']) && $this->session->token){
-				$this->user = $this->yiban->getUser($this->session->token);
-				$this->data['user_info'] = $this->user->me()['info'];
-		}
+		// // 本地服务器配置
+		// $config = array(
+		// 				'appID' => 'b3a15ae91bbdb732',
+    //                     'appSecret' => 'fc253742de277b0ca343794f6997c45c',
+    //                     'callback' => "http://f.yiban.cn/iapp63235"
+    //                     );
+		//
+		// $this->load->library('YibanSDK',$config,'yiban');
+		//
+		// if (!$this->input->get('verify_request')) {
+		// 		$this->session->url = $_SERVER['REQUEST_URI'];
+		// }
+		// //var_dump($this->session);
+		// if (!isset($this->session->token)) {     // 未获取授权
+		// /**
+		//  * 从授权服务器回调返回时，URL中带有code（授权码）参数
+		//  *
+		//  */
+		//
+		// 		$au  = $this->yiban->getAuthorize();
+		// 		//var_dump($this->input->post());
+		// 		if ($this->input->get('verify_request')) {
+		// 		/**
+		// 		 * 使用授权码（code）获取访问令牌
+		// 		 * 若获取成功，返回 $info['access_token']
+		// 		 * 否则查看对应的 msgCN 查看错误信息
+		// 		 */
+		// 				$info = $this->yiban->getFrameUtil()->perform();
+		// 				//var_dump($info);
+		// 				if (!isset($info['visit_oauth']['access_token'])) {
+		// 						//echo $info['msgCN'];
+		// 						redirect($au->forwardurl());
+		// 				}
+		// 				$this->session->token = $info['visit_oauth']['access_token'];
+		// 				$this->data['user_info']['yb_userid'] = $info['visit_user']['userid'];
+		// 				$this->data['user_info']['yb_username'] = $info['visit_user']['username'];
+		// 				header("Location: " . $this->session->url);
+		// 		}
+		// 		else {   // 重定向到授权服务器（原sdk使用header()重定向）
+		// 				redirect($au->forwardurl());
+		// 				// header('Location: ' . $au->forwardurl());
+		// 		}
+		// }
+		// if(!isset($this->data['user_info']) && $this->session->token){
+		// 		$this->user = $this->yiban->getUser($this->session->token);
+		// 		$this->data['user_info'] = $this->user->me()['info'];
+		// }
 
 		if($this->weekday['today'] == $this->weekday['monday'])
 		{
@@ -245,9 +246,15 @@ class Duty extends CI_Controller{
 		{
 			$data['content'] = "选班成功";
 			$para = $this->Duty_model->yb_data($this->data['user_info']['yb_username']);
-			// $this->Email_model->send($para['email'],);
+			$this->send("选班成功","亲爱的".$this->data['user_info']['yb_username'].",您好，您已经成功的选择了".$this->weekday[$this->goal['dy']['date']]."的值班，
+			请不要迟到早退哦，加油",$para[0]['email']);
 		}
 		echo $data['content'];
+	}
+
+	public function send($subject="hello",$message="test",$to="huhaobin110@gmail.com",$user="中南易班",$from="hhb@csuyiban.net")
+	{
+		$this->my_email->send($to,$subject,$message,$from,$user);
 	}
 
 	public function check()

@@ -12,7 +12,7 @@ class Data extends CI_Controller
 		parent::__construct();
 		$this->load->helper(array('form', 'url'));
 		$this->load->model('Data_model');
-		
+
 		//$this->data['user_info']['yb_userid'] = "7041045";
 		//$this->data['user_info']['yb_username'] = "胡皓斌";
         //本地配置
@@ -28,41 +28,41 @@ class Data extends CI_Controller
                         'appSecret' => 'dd709192814ee03530783622d08ffc05',
                         'callback' => "http://f.yiban.cn/iapp69591");
         $this->load->library('YibanSDK', $config, 'yiban');
-        if (!$this->input->get('verify_request')) {
-            $this->session->url = $_SERVER['REQUEST_URI'];
-        }
-        //var_dump($this->session);
-        if (!isset($this->session->token)) {     // 未获取授权
-        /**
-         * 从授权服务器回调返回时，URL中带有code（授权码）参数
-         *
-         */
-         
-            $au  = $this->yiban->getAuthorize();
-            if ($this->input->get('verify_request')) {
-            /**
-             * 使用授权码（code）获取访问令牌
-             * 若获取成功，返回 $info['access_token']
-             * 否则查看对应的 msgCN 查看错误信息
-             */
-                $info = $this->yiban->getFrameUtil()->perform();
-                if (!isset($info['visit_oauth']['access_token'])) {
-                    redirect($au->forwardurl());
-                }
-                $this->session->token = $info['visit_oauth']['access_token'];
-                $this->data['user_info']['yb_userid'] = $info['visit_user']['userid'];
-                $this->data['user_info']['yb_username'] = $info['visit_user']['username'];
-                header("Location: " . $this->session->url);
-            }
-            else {   // 重定向到授权服务器（原sdk使用header()重定向）
-                redirect($au->forwardurl());
-                // header('Location: ' . $au->forwardurl());
-            }
-        }
-        if(!isset($this->data['user_info']) && $this->session->token){
-            $this->user = $this->yiban->getUser($this->session->token);
-            $this->data['user_info'] = $this->user->me()['info'];
-        }
+        // if (!$this->input->get('verify_request')) {
+        //     $this->session->url = $_SERVER['REQUEST_URI'];
+        // }
+        // //var_dump($this->session);
+        // if (!isset($this->session->token)) {     // 未获取授权
+        // /**
+        //  * 从授权服务器回调返回时，URL中带有code（授权码）参数
+        //  *
+        //  */
+        //
+        //     $au  = $this->yiban->getAuthorize();
+        //     if ($this->input->get('verify_request')) {
+        //     /**
+        //      * 使用授权码（code）获取访问令牌
+        //      * 若获取成功，返回 $info['access_token']
+        //      * 否则查看对应的 msgCN 查看错误信息
+        //      */
+        //         $info = $this->yiban->getFrameUtil()->perform();
+        //         if (!isset($info['visit_oauth']['access_token'])) {
+        //             redirect($au->forwardurl());
+        //         }
+        //         $this->session->token = $info['visit_oauth']['access_token'];
+        //         $this->data['user_info']['yb_userid'] = $info['visit_user']['userid'];
+        //         $this->data['user_info']['yb_username'] = $info['visit_user']['username'];
+        //         header("Location: " . $this->session->url);
+        //     }
+        //     else {   // 重定向到授权服务器（原sdk使用header()重定向）
+        //         redirect($au->forwardurl());
+        //         // header('Location: ' . $au->forwardurl());
+        //     }
+        // }
+        // if(!isset($this->data['user_info']) && $this->session->token){
+        //     $this->user = $this->yiban->getUser($this->session->token);
+        //     $this->data['user_info'] = $this->user->me()['info'];
+        // }
 
 		if(isset($this->input->post()['page']))
 		{
@@ -77,7 +77,7 @@ class Data extends CI_Controller
 			header("Location:".base_url()."data/index/".($page-1)*$this->data['per_page']);
 		}
 	}
-	
+
 	public function search()
 	{
 		if($this->input->post()['search'])
@@ -185,11 +185,11 @@ class Data extends CI_Controller
 			$config['overwrite']        = true;
 			$config['file_name']        = date('Y_m_d_h_i_s');
 
-			//$this->load->helper('form'); 
+			//$this->load->helper('form');
 	        $this->load->library('upload', $config);
 
 	        if (!$this->upload->do_upload('userfile'))
-			{ 
+			{
 				$error = array('error' => $this->upload->display_errors());
 	        	$this->load->view('data/header');
 	        	$this->load->view('data/upload',$error);
@@ -268,22 +268,22 @@ class Data extends CI_Controller
     	}
 	}
 
-	private function object2array(&$object) 
+	private function object2array(&$object)
 	{
 	    $object = json_decode( json_encode( $object),true);
 	    return $object;
     }
-	private function object2array_pre(&$object) 
+	private function object2array_pre(&$object)
 	{
-	    if (is_object($object)) 
+	    if (is_object($object))
 	    {
 	    	$arr = (array)($object);
-	    } 
-	    else 
+	    }
+	    else
 	    {
 	    	$arr = &$object;
 	    }
-	    if (is_array($arr)) 
+	    if (is_array($arr))
 	    {
 		    foreach($arr as $varName => $varValue)
 		    {

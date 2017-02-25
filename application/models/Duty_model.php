@@ -81,7 +81,7 @@ class Duty_model extends MY_Model
 
 	public function yb_data($data)
 	{
-		$this->db->select('yb_userid','email');
+		$this->db->select('yb_userid,email');
 		$query = $this->db->get_where('staffinf',array('name' => $data));
 		return $query->result_array();
 	}

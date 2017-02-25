@@ -17,13 +17,13 @@
       background-image: url('<?php echo base_url();?>images/photo.jpg');
       width: auto;
       height: auto;
-      //position: absolute;
-      z-index: -1;
+      /*//position: absolute;*/
+      /*z-index: -1;*/
       /*border='0' src='<?php echo base_url();?>images/photo.jpg' width='100%' height='100%' style='position: absolute;left:0px;top:0px;z-index: -1'*/
     }
   </style>
 	<link rel="stylesheet" href="<?php echo base_url() ;?>css/data/table.css" />
-	
+
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <!-- <base href="{base_url()}/yiban"> -->
@@ -71,4 +71,3 @@
       </div><!--/.nav-collapse -->
     </div><!--/.container-fluid -->
   </nav>
-
