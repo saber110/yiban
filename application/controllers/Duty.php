@@ -22,42 +22,78 @@ class Duty extends CI_Controller{
 		$this->weekday['Saturday'] = date('Y-m-d',strtotime('+1 day',strtotime($this->weekday['Friday'])));
 		$this->weekday['Sunday'] = date('Y-m-d',strtotime('+1 day',strtotime($this->weekday['Saturday'])));
 
-		$this->data['user_info']['yb_username'] = "胡皓斌";
-		$this->data['user_info']['yb_userid']   = 7041045;
+		// $this->data['user_info']['yb_username'] = "胡皓斌";
+		// $this->data['user_info']['yb_userid']   = 7041045;
 
-		// // 本地服务器配置
-		// $config = array(
-		// 				'appID' => 'b3a15ae91bbdb732',
-    //                     'appSecret' => 'fc253742de277b0ca343794f6997c45c',
-    //                     'callback' => "http://f.yiban.cn/iapp63235"
-    //                     );
-		//
-		// $this->load->library('YibanSDK',$config,'yiban');
-		//
-		// $this->yiban->getAuth();
-    //     $this->data['user_info'] = $this->session->user_info;
-		//
-		// if($this->weekday['today'] == $this->weekday['monday'])
-		// {
-		// 	if(! $this->Duty_model->DutyQRcode('get',$this->weekday['today']))
-		// 	{
-		// 		$edited['user_id'] = $this->data['user_info']['yb_userid'];
-		//         $edited['user_name'] = $this->data['user_info']['yb_username'];
-		//         $edited['created_date'] = date('Y-m-d h:i:s');
-		//         $event_id = $this->Qiandao_model->create($edited);
-		//         if($event_id)
-		//         {
-		// 			include(APPPATH . 'third_party/phpqrcode/qrlib.php');
-		//             $save_path = 'attch/' . md5($event_id) . '.png';
-		//             QRcode::png(base_url() . "index.php/qiandao/check?event_id=".$event_id." ", $save_path, QR_ECLEVEL_H, 7);
-		//             //更新二维码路径
-		//             $this->Qiandao_model->update_qrcode($event_id, $save_path);
-		//             $this->data['qrcode'] = $save_path;
-		//             $this->Duty_model->DutyQRcode('set',date('Y-m-d h:i:s'));
-		//             return;
-	  //       	}
-		// 	}
-		// }
+		// 本地服务器配置
+		$config = array(
+						'appID' => 'b3a15ae91bbdb732',
+                        'appSecret' => 'fc253742de277b0ca343794f6997c45c',
+                        'callback' => "http://f.yiban.cn/iapp63235"
+                        );
+
+		$this->load->library('YibanSDK',$config,'yiban');
+
+		if (!$this->input->get('verify_request')) {
+				$this->session->url = $_SERVER['REQUEST_URI'];
+		}
+		//var_dump($this->session);
+		if (!isset($this->session->token)) {     // 未获取授权
+		/**
+		 * 从授权服务器回调返回时，URL中带有code（授权码）参数
+		 *
+		 */
+
+				$au  = $this->yiban->getAuthorize();
+				//var_dump($this->input->post());
+				if ($this->input->get('verify_request')) {
+				/**
+				 * 使用授权码（code）获取访问令牌
+				 * 若获取成功，返回 $info['access_token']
+				 * 否则查看对应的 msgCN 查看错误信息
+				 */
+						$info = $this->yiban->getFrameUtil()->perform();
+						//var_dump($info);
+						if (!isset($info['visit_oauth']['access_token'])) {
+								//echo $info['msgCN'];
+								redirect($au->forwardurl());
+						}
+						$this->session->token = $info['visit_oauth']['access_token'];
+						$this->data['user_info']['yb_userid'] = $info['visit_user']['userid'];
+						$this->data['user_info']['yb_username'] = $info['visit_user']['username'];
+						header("Location: " . $this->session->url);
+				}
+				else {   // 重定向到授权服务器（原sdk使用header()重定向）
+						redirect($au->forwardurl());
+						// header('Location: ' . $au->forwardurl());
+				}
+		}
+		if(!isset($this->data['user_info']) && $this->session->token){
+				$this->user = $this->yiban->getUser($this->session->token);
+				$this->data['user_info'] = $this->user->me()['info'];
+		}
+
+		if($this->weekday['today'] == $this->weekday['monday'])
+		{
+			if(! $this->Duty_model->DutyQRcode('get',$this->weekday['today']))
+			{
+				$edited['user_id'] = $this->data['user_info']['yb_userid'];
+		        $edited['user_name'] = $this->data['user_info']['yb_username'];
+		        $edited['created_date'] = date('Y-m-d h:i:s');
+		        $event_id = $this->Qiandao_model->create($edited);
+		        if($event_id)
+		        {
+					include(APPPATH . 'third_party/phpqrcode/qrlib.php');
+		            $save_path = 'attch/' . md5($event_id) . '.png';
+		            QRcode::png(base_url() . "index.php/qiandao/check?event_id=".$event_id." ", $save_path, QR_ECLEVEL_H, 7);
+		            //更新二维码路径
+		            $this->Qiandao_model->update_qrcode($event_id, $save_path);
+		            $this->data['qrcode'] = $save_path;
+		            $this->Duty_model->DutyQRcode('set',date('Y-m-d h:i:s'));
+		            return;
+	        	}
+			}
+		}
 	}
 
 	public function index()
