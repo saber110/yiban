@@ -7,7 +7,7 @@ class Duty_model extends MY_Model
 		parent::__construct();
 		$this->load->database();
 	}
-	
+
 	public function apply($method,$date,$type,$id)
 	{
 		if($method == 'inquire')
@@ -72,7 +72,7 @@ class Duty_model extends MY_Model
 			$query = $this->db->get_where('duty',array('dy_date' => $data));
 			return $query->row();
 		}
-		elseif ($method == 'set') 
+		elseif ($method == 'set')
 		{
 			$query = $this->db->insert('duty',array('QRcode' => $data));
 			return $query->result_array();
@@ -94,8 +94,8 @@ class Duty_model extends MY_Model
 	}
 
 	public function get_duty($time)
-	{	
-		$num = 0;
+	{
+
 		$query[0] = $this->db->get_where('duty',array('dy_date' => $time['monday']));
 		$query[1] = $this->db->get_where('duty',array('dy_date' => $time['Tuesday']));
 		$query[2] = $this->db->get_where('duty',array('dy_date' => $time['Wednesday']));
@@ -103,30 +103,33 @@ class Duty_model extends MY_Model
 		$query[4] = $this->db->get_where('duty',array('dy_date' => $time['Friday']));
 		$query[5] = $this->db->get_where('duty',array('dy_date' => $time['Saturday']));
 		$query[6] = $this->db->get_where('duty',array('dy_date' => $time['Sunday']));
-		foreach ($query as $value)
-		{
-			$result[$num] = $value->result_array();
-			$num ++;		
-		}		
-		return $result;		
+
+		$result['monday']    = $query[0]->result_array();
+		$result['Tuesday']   = $query[1]->result_array();
+		$result['Wednesday'] = $query[2]->result_array();
+		$result['Thursday']  = $query[3]->result_array();
+		$result['Friday']    = $query[4]->result_array();
+		$result['Saturday']  = $query[5]->result_array();
+		$result['Sunday']    = $query[6]->result_array();
+
+		return $result;
 	}
 
-	public function set_duty($data)
+	public function set_duty($userid,$username,$date,$type)
 	{
 		// $query = $this->db->get_where('duty',array(
 		// 											'dy_date' => $data['dy_date'],
 		// 											'dy_type' => $data['dy_type']
 		// 											));
 		$query = $this->db->get_where('duty',array(
-													'dy_date' => date('Y-m-d'),
-													'dy_type' => 1
+													'dy_date' => $date,
+													'dy_type' => $type
 													));
 		$result = $query->result_array();
-		var_dump(count($result));
 
 		if(count($result)>=3)
 		{
-			return 'false';
+			return 'over';
 		}
 		else
 		{
@@ -136,19 +139,14 @@ class Duty_model extends MY_Model
 			// 	'dy_type'   => $data['dy']['dy_type'],
 			// 	'remark'    => ""
 			// 	);
-			var_dump(date('Y-m-d'));
-			var_dump(($this->db->get_where('duty',array(
-													'dy_date' => date('Y-m-d'),
-													'dy_type' => 1
-													))));
-			exit();
 			$duty = array(
-				'yb_userid' => "7101405",
-				'dy_date'   => date('Y-m-d'),
-				'dy_type'   => 1,
+				'yb_userid' => $userid,
+				'yb_username' => $username,
+				'dy_date'   => $date,
+				'dy_type'   => $type,
 				'remark'    => ""
 				);
-			$this->db->insert('duty',$duty);
+			return $this->db->insert('duty',$duty);
 		}
 	}
 

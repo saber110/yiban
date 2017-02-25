@@ -22,40 +22,42 @@ class Duty extends CI_Controller{
 		$this->weekday['Saturday'] = date('Y-m-d',strtotime('+1 day',strtotime($this->weekday['Friday'])));
 		$this->weekday['Sunday'] = date('Y-m-d',strtotime('+1 day',strtotime($this->weekday['Saturday'])));
 
+		$this->data['user_info']['yb_username'] = "胡皓斌";
+		$this->data['user_info']['yb_userid']   = 7041045;
 
-		// 本地服务器配置
-		$config = array(
-						'appID' => 'b3a15ae91bbdb732',
-                        'appSecret' => 'fc253742de277b0ca343794f6997c45c',
-                        'callback' => "http://f.yiban.cn/iapp63235"
-                        );
-
-		$this->load->library('YibanSDK',$config,'yiban');
-
-		$this->yiban->getAuth();
-        $this->data['user_info'] = $this->session->user_info;
-
-		if($this->weekday['today'] == $this->weekday['monday'])
-		{
-			if(! $this->Duty_model->DutyQRcode('get',$this->weekday['today']))
-			{
-				$edited['user_id'] = $this->data['user_info']['yb_userid'];
-		        $edited['user_name'] = $this->data['user_info']['yb_username'];
-		        $edited['created_date'] = date('Y-m-d h:i:s');
-		        $event_id = $this->Qiandao_model->create($edited);
-		        if($event_id)
-		        {
-					include(APPPATH . 'third_party/phpqrcode/qrlib.php');
-		            $save_path = 'attch/' . md5($event_id) . '.png';
-		            QRcode::png(base_url() . "index.php/qiandao/check?event_id=".$event_id." ", $save_path, QR_ECLEVEL_H, 7);
-		            //更新二维码路径
-		            $this->Qiandao_model->update_qrcode($event_id, $save_path);
-		            $this->data['qrcode'] = $save_path;
-		            $this->Duty_model->DutyQRcode('set',date('Y-m-d h:i:s'));
-		            return;
-	        	}
-			}
-		}
+		// // 本地服务器配置
+		// $config = array(
+		// 				'appID' => 'b3a15ae91bbdb732',
+    //                     'appSecret' => 'fc253742de277b0ca343794f6997c45c',
+    //                     'callback' => "http://f.yiban.cn/iapp63235"
+    //                     );
+		//
+		// $this->load->library('YibanSDK',$config,'yiban');
+		//
+		// $this->yiban->getAuth();
+    //     $this->data['user_info'] = $this->session->user_info;
+		//
+		// if($this->weekday['today'] == $this->weekday['monday'])
+		// {
+		// 	if(! $this->Duty_model->DutyQRcode('get',$this->weekday['today']))
+		// 	{
+		// 		$edited['user_id'] = $this->data['user_info']['yb_userid'];
+		//         $edited['user_name'] = $this->data['user_info']['yb_username'];
+		//         $edited['created_date'] = date('Y-m-d h:i:s');
+		//         $event_id = $this->Qiandao_model->create($edited);
+		//         if($event_id)
+		//         {
+		// 			include(APPPATH . 'third_party/phpqrcode/qrlib.php');
+		//             $save_path = 'attch/' . md5($event_id) . '.png';
+		//             QRcode::png(base_url() . "index.php/qiandao/check?event_id=".$event_id." ", $save_path, QR_ECLEVEL_H, 7);
+		//             //更新二维码路径
+		//             $this->Qiandao_model->update_qrcode($event_id, $save_path);
+		//             $this->data['qrcode'] = $save_path;
+		//             $this->Duty_model->DutyQRcode('set',date('Y-m-d h:i:s'));
+		//             return;
+	  //       	}
+		// 	}
+		// }
 	}
 
 	public function index()
@@ -69,9 +71,107 @@ class Duty extends CI_Controller{
 		else//已经进行绑定
 		{
 			$this->duty['data'] = $this->Duty_model->get_duty($this->weekday);
-			
+			// var_dump($this->duty['data']);
+			$table['data'] = array('first' =>array(0,0,0,0,0,0,0),
+										'second' =>array(0,0,0,0,0,0,0),
+									  'third'  =>array(0,0,0,0,0,0,0),
+								    'forth'  =>array(0,0,0,0,0,0,0),
+										'fifth'  =>array(0,0,0,0,0,0,0),
+										'sixth'  =>array(0,0,0,0,0,0,0),
+										'seventh'=>array(0,0,0,0,0,0,0));
+			$index = array('1' => 'first',
+		 								'2'  => 'second',
+										'3'  => 'third',
+										'4'  => 'forth',
+										'5'  => 'fifth',
+										'6'  => 'sixth',
+										'7'  => 'seventh');
+			foreach ($this->duty['data'] as $key => $value) {
+				switch($key)
+				{
+					case 'monday':
+					{
+
+						// if(isset($value[0]))
+						{
+							foreach ($value as $value1) {
+								$table['data'][$index[$value1['dy_type']]][0]+=1;
+							}
+						}
+						// else
+						// 	$table['data']['first']=array(0,0,0,0,0,0,0);
+					}break;
+					case 'Tuesday':
+					{
+						// if(isset($value[0]))
+						{
+							foreach ($value as $value1) {
+								$table['data'][$index[$value1['dy_type']]][1]+=1;
+							}
+						}
+						// else
+							// $table['data']['second']=array(0,0,0,0,0,0,0);
+					}break;
+					case 'Wednesday':
+					{
+						// if(isset($value[0]))
+						{
+							foreach ($value as $value1) {
+								$table['data'][$index[$value1['dy_type']]][2]+=1;
+							}
+						}
+						// else
+							// $table['data']['third']=array(0,0,0,0,0,0,0);
+					}break;
+					case 'Thursday':
+					{
+						// if(isset($value[0]))
+						{
+							foreach ($value as $value1) {
+								$table['data'][$index[$value1['dy_type']]][3]+=1;
+							}
+						}
+						// else
+							// $table['data']['forth']=array(0,0,0,0,0,0,0);
+					}break;
+					case 'Friday':
+					{
+						// if(isset($value[0]))
+						{
+							foreach ($value as $value1) {
+								$table['data'][$index[$value1['dy_type']]][4]+=1;
+							}
+						}
+						// else
+							// $table['data']['fifth']=array(0,0,0,0,0,0,0);
+					}break;
+					case 'Saturday':
+					{
+						// if(isset($value[0]))
+						{
+							foreach ($value as $value1) {
+								$table['data'][$index[$value1['dy_type']]][5]+=1;
+							}
+						}
+						// else
+							// $table['data']['sixth']=array(0,0,0,0,0,0,0);
+					}break;
+					case 'Sunday':
+					{
+						// if(isset($value[0]))
+						{
+							foreach ($value as $value1) {
+								$table['data'][$index[$value1['dy_type']]][6]+=1;
+							}
+						}
+						// else
+							// $table['data']['seventh']=array(0,0,0,0,0,0,0);
+					}break;
+				}
+			}
+			// print_r($table);
 			$this->load->view('duty/header');
-			$this->load->view('duty/index',$this->duty);
+			$this->load->view('duty/index',$table);
 			$this->load->view('duty/footer');
 		}
 	}
@@ -98,10 +198,10 @@ class Duty extends CI_Controller{
 		$this->duty = $this->Duty_model->get_duty($this->weekday);
 		$this->goal['dy'] = $this->input->post();//获取值班时间和班次类型
 		$this->goal['data'] = $this->data;
-		$this->status = $this->Duty_model->set_duty($this->goal);
-		var_dump($this->duty);var_dump($this->goal);var_dump($this->status);
-		// exit();
-		if($this->status == 'false')
+		$this->status = $this->Duty_model->set_duty($this->data['user_info']['yb_userid'],$this->data['user_info']['yb_username'],
+																								$this->weekday[$this->goal['dy']['date']],$this->goal['dy']['type']);
+
+		if($this->status === 'over')
 		{
 			$data['content'] = "此班人数已满";
 		}
@@ -109,8 +209,9 @@ class Duty extends CI_Controller{
 		{
 			$data['content'] = "选班成功";
 			$para = $this->Duty_model->yb_data($this->data['user_info']['yb_username']);
-			$this->Email_model->send($para['email'],)
+			// $this->Email_model->send($para['email'],);
 		}
+		echo $data['content'];
 	}
 
 	public function check()
@@ -134,17 +235,17 @@ class Duty extends CI_Controller{
 		$nimade['tamade'] = $this->Duty_model->contacts() ;
 		//处理部门和小组数据，分组展示
 		$this->load->view('duty/header');
-		
+
 		$this->load->view('duty/contents',$nimade);
 		$this->load->view('duty/footer');
 	}
 
 	public function getdays($day)
-	{ 
-	    $lastday=date('Y-m-d',strtotime("$day Sunday")); 
-	    $firstday=date('Y-m-d',strtotime("$lastday -6 days")); 
-	    return array('firstday' => $firstday,'lastday' => $lastday); 
-	} 
+	{
+	    $lastday=date('Y-m-d',strtotime("$day Sunday"));
+	    $firstday=date('Y-m-d',strtotime("$lastday -6 days"));
+	    return array('firstday' => $firstday,'lastday' => $lastday);
+	}
 	//行政具有管理员权限
 	//部长总监具有超管权限
 	public function admin()
@@ -153,7 +254,7 @@ class Duty extends CI_Controller{
 		{
 			//换班
 			$data['content'] = $this->Duty_model->admin('admin_apply','zanliu');
-			
+
 			//排班
 			$data['paiban'] = $this->input->post();
 			$data['data']   = $this->data;
@@ -182,7 +283,7 @@ class Duty extends CI_Controller{
 
 			//换班
 			$data['content'] = $this->Duty_model->admin('admin_apply','zanliu');
-			
+
 			//排班
 			$data['paiban'] = $this->input->post();
 			$data['data']   = $this->data;
