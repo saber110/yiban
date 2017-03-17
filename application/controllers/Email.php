@@ -19,5 +19,6 @@ class Email extends CI_Controller
     $email = $this->input->post()['ContactEmail'];
     $message = $this->input->post()['ContactComment'];
     $this->my_email->send($to,$subject,$message,$from,$user); 
+	echo "<script>alert('你的老板收到了');history.go(-1);</script>";
   }
 }

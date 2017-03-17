@@ -13,7 +13,6 @@ class Question_bank extends CI_Controller{
 		require_once APPPATH . 'third_party/PHPExcel/Classes/PHPExcel/IOFactory.php';
 		require_once APPPATH . 'third_party/PHPExcel/Classes/PHPExcel/Reader/Excel5.php';
 		
-
 		// site服务器配置
 		$config = array('appID' => '3d8157e7e4d7e123',
                         'appSecret' => '31c12fd4d8a19da28113b5e89c34081e',
@@ -106,12 +105,12 @@ class Question_bank extends CI_Controller{
 		$objPHPExcel = $objReader->load($excelpath); 	
 	    $sheet = $objPHPExcel->getSheet(0); 
 	    $highestRow = $sheet->getHighestRow();           //取得总行数 
-	    // var_dump('ROW');
-	    // var_dump($highestRow);
+	     var_dump('ROW');
+	     var_dump($highestRow);
 	    $highestColumn = $sheet->getHighestColumn();     //取得总列数
-	    // var_dump('columu');
-	    // var_dump($highestColumn);
-
+	     var_dump('columu');
+	     var_dump($highestColumn);
+		$highestColumn = 'M';
 
 		for($j=3;$j<=$highestRow;$j++)                       //从第三行开始读取数据
 	    { 
@@ -140,8 +139,8 @@ class Question_bank extends CI_Controller{
 	        	'cardnumber' => $strs[11],
 	        	'stdnumber'  => $strs[12]
 	        	);
-	        // var_dump($sql);
-			$this->Question_bank_model->setdata($sql);
+	         //var_dump($sql);
+			$this->Question_bank_model->setdb($sql);
         }
 	}
 

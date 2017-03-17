@@ -10,9 +10,8 @@
 		{
 			$.post("<?php echo base_url();?>Duty/select",{date:A,type:B},function(result)
 			{
-				// location.reload();
-				console.log(result);
-
+				alert(result);
+				location.reload();
 			})
 		}
 

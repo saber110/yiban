@@ -12,8 +12,7 @@
 	<meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1.0,user-scalable=no">  <!-- 禁止用户修改网页大小 -->
 	<meta name="google" value="notranslate">  <!-- 禁用google翻译网页 -->
 	<meta name="robots" content="index,follow">  <!-- 网页搜索引擎方式 -->
-  <title>易班值班签到</title>
-  <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/duty/style.css">
-  <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/duty/dutytable.css"> -->
-</head>
+    <title>易班值班签到</title>
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/duty/style.css">
+</head>	
 <body>

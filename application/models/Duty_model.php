@@ -88,13 +88,11 @@ class Duty_model extends MY_Model
 
 	public function set_ybdata($dataid,$dataname)
 	{
-		$sql = 'UPDATE staffinf SET yb_userid = '.$dataid.' WHERE name = '.$dataname;
-		$query = $this->db->query($sql);
-		return $query->result_array();
+		$sql = 'UPDATE staffinf SET yb_userid = '.$dataid.' WHERE name = '.'.$dataname.';
+		$this->db->where('name',$dataname);
+		$this->db->update('staffinf', array('yb_userid'=>$dataid));
 	}
-	/**
-	 * @function 获取本周所有值班信息
-	 */
+
 	public function get_duty($time)
 	{
 
@@ -113,6 +111,7 @@ class Duty_model extends MY_Model
 		$result['Friday']    = $query[4]->result_array();
 		$result['Saturday']  = $query[5]->result_array();
 		$result['Sunday']    = $query[6]->result_array();
+
 		return $result;
 	}
 
@@ -150,9 +149,7 @@ class Duty_model extends MY_Model
 			return $this->db->insert('duty',$duty);
 		}
 	}
-/**
- * 某个人班次统计
- */
+
 	public function statistics($data)
 	{
 		// $this->db->order_by('yb_date', 'DESC');
