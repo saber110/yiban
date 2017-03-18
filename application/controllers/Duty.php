@@ -12,6 +12,7 @@ class Duty extends CI_Controller{
 		$this->load->model('Duty_model');
 		$this->load->model('Email_model');
 		$this->load->library('My_email');
+		$this->load->library('DataOption');
 
 		$this->weekday['today'] = date('w',strtotime(date('Y-m-d')));
 		$this->weekday['days'] = $this->getdays(date('Y-m-d'));
@@ -23,14 +24,13 @@ class Duty extends CI_Controller{
 		$this->weekday['Saturday'] = date('Y-m-d',strtotime('+1 day',strtotime($this->weekday['Friday'])));
 		$this->weekday['Sunday'] = date('Y-m-d',strtotime('+1 day',strtotime($this->weekday['Saturday'])));
 
-		$this->data['user_info']['yb_username'] = "胡皓斌";
-		$this->data['user_info']['yb_userid']   = 7041045;
-
+		$this->data['user_info']['yb_username']="胡皓斌";
+		$this->data['user_info']['yb_userid'] = 7041045;
 		// // 本地服务器配置
 		// $config = array(
-		// 				'appID' => 'b3a15ae91bbdb732',
-    //                     'appSecret' => 'fc253742de277b0ca343794f6997c45c',
-    //                     'callback' => "http://f.yiban.cn/iapp63235"
+		// 				'appID' => '224ffbe0dba1e41e',
+    //                     'appSecret' => 'd152d9e13af0a1c6295344a9b9aa88e8',
+    //                     'callback' => "http://f.yiban.cn/iapp100597"
     //                     );
 		//
 		// $this->load->library('YibanSDK',$config,'yiban');
@@ -71,8 +71,10 @@ class Duty extends CI_Controller{
 		// }
 		// if(!isset($this->data['user_info']) && $this->session->token){
 		// 		$this->user = $this->yiban->getUser($this->session->token);
+		//
 		// 		$this->data['user_info'] = $this->user->me()['info'];
 		// }
+		// $this->user = $this->yiban->getUser($this->session->token);
 
 		if($this->weekday['today'] == $this->weekday['monday'])
 		{
@@ -108,7 +110,7 @@ class Duty extends CI_Controller{
 		else//已经进行绑定
 		{
 			$this->duty['data'] = $this->Duty_model->get_duty($this->weekday);
-			// var_dump($this->duty['data']);
+			var_dump($this->duty['data']);
 			$table['data'] = array('first' =>array(0,0,0,0,0,0,0),
 										'second' =>array(0,0,0,0,0,0,0),
 									  'third'  =>array(0,0,0,0,0,0,0),
@@ -212,7 +214,17 @@ class Duty extends CI_Controller{
 			$this->load->view('duty/footer');
 		}
 	}
+	/**
+	 * 本周选班情况
+	 */
+	public function record($value='')
+	{
+		$this->duty['data'] = $this->Duty_model->get_duty($this->weekday);
 
+		// $this->load->view('duty/header');
+		$this->load->view('duty/dutytable',$this->duty);
+		// $this->load->view('duty/footer');
+	}
 	//退班
 	//获取点击的日期和类型
 	public function apply()
@@ -262,6 +274,29 @@ class Duty extends CI_Controller{
 		header("Location:".base_url()."qiandao/check?event_id=".$this->Duty_model->DutyQRcode('get',$this->weekday['monday']));
 	}
 
+	/**
+	 * 行政导出本周值班表
+	 */
+	public function List($value='')
+	{
+		if($this->Duty_model->yb_data($this->data['user_info']['yb_userid'])['stdgroup']=='人资组')
+		{
+			$this->duty['data'] = $this->Duty_model->get_duty($this->weekday);
+			$num=0;
+			foreach ($this->duty['data'] as $key => $temp) {
+				foreach ($temp as $key => $value) {
+					if(!empty($value))
+						$content[$num++]=$value;
+				}
+			}
+			$this->dataoption->Export('中南易班值班表',array('A1'=>"序号",'B1'=>'易班id','C1'=>'姓名',
+																'D1'=>'值班日期','E1'=>'班次类型(数字代表改天第几个班)','F1'=>'二维码','G1'=>'退班申请',
+																'H1'=>'备注'),$content,'中南易班值班表.xls');
+		}
+		else {
+			header('Location :'.base_url().'duty');
+		}
+	}
 	public function statistics()
 	{
 		$nimade['statistics'] = $this->Duty_model->statistics($this->data['user_info']['yb_userid']);
@@ -277,10 +312,10 @@ class Duty extends CI_Controller{
 	{
 		$nimade['tamade'] = $this->Duty_model->contacts() ;
 		//处理部门和小组数据，分组展示
-		$this->load->view('duty/header');
+		// $this->load->view('duty/header');
 
-		$this->load->view('duty/contents',$nimade);
-		$this->load->view('duty/footer');
+		$this->load->view('duty/contacts',$nimade);
+		// $this->load->view('duty/footer');
 	}
 
 	public function getdays($day)
@@ -322,15 +357,17 @@ class Duty extends CI_Controller{
 		elseif($this->Duty_model->admin('privilege',$this->data['user_info']['yb_userid']) == "chaoguan")
 		{
 			//管理管理员	ajax修改管理员权限
-			$admin['list'] = $this->Duty_model->admin('list','zanliu');
-
+			$data['admin_list'] = $this->Duty_model->admin('list','zanliu');
+			$data['duty_list'] = $this->Duty_model->get_duty($this->weekday);
 			//换班
 			$data['content'] = $this->Duty_model->admin('admin_apply','zanliu');
 
 			//排班
 			$data['paiban'] = $this->input->post();
 			$data['data']   = $this->data;
-			$this->status = $this->Duty_model->set_duty($this->data);
+			$this->status  = "true";
+			//$this->status = $this->Duty_model->set_duty($this->data['user_info']['yb_userid'],$this->data['user_info']['yb_username'],
+			//																						$this->weekday['today']，);
 			// var_dump($this->duty);var_dump($this->goal);var_dump($this->status);
 			// exit();
 			if($this->status == 'false')

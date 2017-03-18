@@ -81,7 +81,7 @@ class Duty_model extends MY_Model
 
 	public function yb_data($data)
 	{
-		$this->db->select('yb_userid,email');
+		$this->db->select('yb_userid,email,stdgroup');
 		$query = $this->db->get_where('staffinf',array('name' => $data));
 		return $query->result_array();
 	}
@@ -92,7 +92,9 @@ class Duty_model extends MY_Model
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-
+	/**
+	 * @function 获取本周所有值班信息
+	 */
 	public function get_duty($time)
 	{
 
@@ -111,7 +113,6 @@ class Duty_model extends MY_Model
 		$result['Friday']    = $query[4]->result_array();
 		$result['Saturday']  = $query[5]->result_array();
 		$result['Sunday']    = $query[6]->result_array();
-
 		return $result;
 	}
 
@@ -149,7 +150,9 @@ class Duty_model extends MY_Model
 			return $this->db->insert('duty',$duty);
 		}
 	}
-
+/**
+ * 某个人班次统计
+ */
 	public function statistics($data)
 	{
 		// $this->db->order_by('yb_date', 'DESC');
